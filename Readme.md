@@ -27,5 +27,6 @@ Bad Word Filter
         > go run test.go
 
         You can change request body in test.go file.
-
+    Work hours : 8
+    
     Cheers
