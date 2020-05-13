@@ -28,4 +28,7 @@ Bad Word Filter
 
         You can change request body in test.go file.
 
+    Performance Test using Apache Benchmark
+        10.8 Requests per second in my local VM(2 Processors, 4G Ram)
+        
     Cheers

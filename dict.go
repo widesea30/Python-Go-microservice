@@ -21,7 +21,7 @@ func init_dict(path *C.char) {
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
-	g_dict_data = make(map[string]interface{}, 1024*1024*1024*8)
+	// g_dict_data = make(map[string]interface{}, 1024*1024*1024*8)
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	json.Unmarshal([]byte(byteValue), &g_dict_data)

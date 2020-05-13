@@ -2,6 +2,8 @@ import os
 from flask import Flask, request
 from ctypes import cdll, c_char_p
 import json
+import threading
+import time
 
 
 app = Flask(__name__)
@@ -13,15 +15,24 @@ lib.get_word.argtypes = [c_char_p]
 lib.get_word.restype = c_char_p
 
 app.lib = lib
+app.dict_loading = False
+
+
+# for test
+@app.route('/', methods=['GET'])
+def index():
+    while app.dict_loading:
+        time.sleep(1)
+    txt = 'test 12'
+    result = filter_text(txt)
+    return {'text': txt, 'topics': result}
 
 
 @app.route('/get_topics', methods=['POST'])
 def get_topics():
     if request.method == 'POST':
-        # load dictionary
-        path = os.getcwd() + '/data.json'  # path of data.json file
-        app.lib.init_dict(c_char_p(path.encode('utf-8')))
-
+        while app.dict_loading:
+            time.sleep(1)
         txt = request.json.get('text')
         result = filter_text(txt)
         return {'text': txt, 'topics': result}
@@ -46,5 +57,20 @@ def filter_text(text):
     return total_topics
 
 
+
+def run_job():
+    while True:
+        # load dictionary from data.json file
+        app.dict_loading = True
+        data_path = os.getcwd() + '/data.json'
+        app.lib.init_dict(c_char_p(data_path.encode('utf-8')))
+        print('initializing...')
+        app.dict_loading = False
+        time.sleep(0.1)
+
+thread = threading.Thread(target=run_job)
+thread.start()
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
