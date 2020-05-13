@@ -31,4 +31,6 @@ Bad Word Filter
     Performance Test using Apache Benchmark
         10.8 Requests per second in my local VM(2 Processors, 4G Ram)
         
+    Work hours : 8
+    
     Cheers
